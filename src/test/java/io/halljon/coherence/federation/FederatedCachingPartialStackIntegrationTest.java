@@ -54,11 +54,6 @@ public class FederatedCachingPartialStackIntegrationTest {
 
         nycClusterName = getNycClusterName();
         ldnClusterName = getLdnClusterName();
-
-        joinLdnClusterAsStorageDisabledClient();
-
-        cache = CacheFactory.getCache(CACHE_NAME);
-        cache.clear();
     }
 
     @Test
@@ -67,10 +62,10 @@ public class FederatedCachingPartialStackIntegrationTest {
         String entryValue = "orange";
 
         joinLdnClusterAsStorageDisabledClient();
-        putItemsAndCheckAsExpectedInThisCluster(cache, totalItems, ldnClusterName, entryValue);
+        putItemsAndCheckAsExpectedInThisCluster(totalItems, ldnClusterName, entryValue);
 
         joinNycClusterAsStorageDisabledClient();
-        checkItemsAsExpectedInOtherCluster(cache, totalItems, nycClusterName, entryValue);
+        checkItemsAsExpectedInOtherCluster(totalItems, nycClusterName, entryValue);
     }
 
     @Test
@@ -79,16 +74,18 @@ public class FederatedCachingPartialStackIntegrationTest {
         String entryValue = "yellow";
 
         joinNycClusterAsStorageDisabledClient();
-        putItemsAndCheckAsExpectedInThisCluster(cache, totalItems, nycClusterName, entryValue);
+        putItemsAndCheckAsExpectedInThisCluster(totalItems, nycClusterName, entryValue);
 
         joinLdnClusterAsStorageDisabledClient();
-        checkItemsAsExpectedInOtherCluster(cache, totalItems, ldnClusterName, entryValue);
+        checkItemsAsExpectedInOtherCluster(totalItems, ldnClusterName, entryValue);
     }
 
-    private static void putItemsAndCheckAsExpectedInThisCluster(NamedCache<String, String> cache,
-                                                                int totalItems,
-                                                                String clusterName,
-                                                                String entryValue) {
+    private void putItemsAndCheckAsExpectedInThisCluster(int totalItems,
+                                                         String clusterName,
+                                                         String entryValue) {
+
+        cache = CacheFactory.getCache(CACHE_NAME);
+        cache.clear();
 
         assertThat(CacheFactory.getCluster().getClusterName(), equalTo(clusterName));
 
@@ -99,10 +96,11 @@ public class FederatedCachingPartialStackIntegrationTest {
         assertThat(cache.size(), equalTo(totalItems));
     }
 
-    private static void checkItemsAsExpectedInOtherCluster(NamedCache<String, String> cache,
-                                                           int totalItems,
-                                                           String clusterName,
-                                                           String expectedEntryValue) {
+    private void checkItemsAsExpectedInOtherCluster(int totalItems,
+                                                    String clusterName,
+                                                    String expectedEntryValue) {
+
+        cache = CacheFactory.getCache(CACHE_NAME);
 
         assertThat(CacheFactory.getCluster().getClusterName(), equalTo(clusterName));
         assertThat(cache.size(), equalTo(totalItems));

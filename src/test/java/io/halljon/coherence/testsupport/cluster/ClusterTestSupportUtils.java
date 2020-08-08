@@ -29,7 +29,15 @@ public final class ClusterTestSupportUtils {
 
     public static ClusterMemberGroup getOrCreateLdnCluster() {
         return ClusterMemberGroupUtils.newBuilder()
-                .setClusterName(LDN_CLUSTER_NAME)
+                .setClusterName(getLdnClusterName())
+                .setStorageEnabledCount(1)
+                .setClusterMemberGroupInstanceClassName(SimpleKeepAliveClusterMemberGroup.class.getName())
+                .buildAndConfigureForStorageDisabledClient();
+    }
+
+    public static ClusterMemberGroup getOrCreateNycCluster() {
+        return ClusterMemberGroupUtils.newBuilder()
+                .setClusterName(getNycClusterName())
                 .setStorageEnabledCount(1)
                 .setClusterMemberGroupInstanceClassName(SimpleKeepAliveClusterMemberGroup.class.getName())
                 .buildAndConfigureForStorageDisabledClient();
@@ -38,14 +46,6 @@ public final class ClusterTestSupportUtils {
     public static void joinLdnClusterAsStorageDisabledClient() {
         CacheFactory.shutdown();
         getOrCreateLdnCluster();
-    }
-
-    public static ClusterMemberGroup getOrCreateNycCluster() {
-        return ClusterMemberGroupUtils.newBuilder()
-                .setClusterName(NYC_CLUSTER_NAME)
-                .setStorageEnabledCount(1)
-                .setClusterMemberGroupInstanceClassName(SimpleKeepAliveClusterMemberGroup.class.getName())
-                .buildAndConfigureForStorageDisabledClient();
     }
 
     public static void joinNycClusterAsStorageDisabledClient() {
