@@ -35,7 +35,7 @@ public final class ClusterTestSupportUtils {
                 .buildAndConfigureForStorageDisabledClient();
     }
 
-    public static void configureForLdnStorageDisabledClient() {
+    public static void joinLdnClusterAsStorageDisabledClient() {
         CacheFactory.shutdown();
         getOrCreateLdnCluster();
     }
@@ -48,7 +48,7 @@ public final class ClusterTestSupportUtils {
                 .buildAndConfigureForStorageDisabledClient();
     }
 
-    public static void configureForNycStorageDisabledClient() {
+    public static void joinNycClusterAsStorageDisabledClient() {
         CacheFactory.shutdown();
         getOrCreateNycCluster();
     }

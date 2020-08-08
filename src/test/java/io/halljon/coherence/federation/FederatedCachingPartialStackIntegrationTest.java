@@ -15,12 +15,12 @@ import org.littlegrid.support.SystemUtils;
 import java.util.Properties;
 import java.util.UUID;
 
-import static io.halljon.coherence.testsupport.cluster.ClusterTestSupportUtils.configureForLdnStorageDisabledClient;
-import static io.halljon.coherence.testsupport.cluster.ClusterTestSupportUtils.configureForNycStorageDisabledClient;
 import static io.halljon.coherence.testsupport.cluster.ClusterTestSupportUtils.getLdnClusterName;
 import static io.halljon.coherence.testsupport.cluster.ClusterTestSupportUtils.getNycClusterName;
 import static io.halljon.coherence.testsupport.cluster.ClusterTestSupportUtils.getOrCreateLdnCluster;
 import static io.halljon.coherence.testsupport.cluster.ClusterTestSupportUtils.getOrCreateNycCluster;
+import static io.halljon.coherence.testsupport.cluster.ClusterTestSupportUtils.joinLdnClusterAsStorageDisabledClient;
+import static io.halljon.coherence.testsupport.cluster.ClusterTestSupportUtils.joinNycClusterAsStorageDisabledClient;
 import static java.util.Collections.singletonMap;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
@@ -55,6 +55,8 @@ public class FederatedCachingPartialStackIntegrationTest {
         nycClusterName = getNycClusterName();
         ldnClusterName = getLdnClusterName();
 
+        joinLdnClusterAsStorageDisabledClient();
+
         cache = CacheFactory.getCache(CACHE_NAME);
         cache.clear();
     }
@@ -64,11 +66,11 @@ public class FederatedCachingPartialStackIntegrationTest {
         int totalItems = 11;
         String entryValue = "orange";
 
-        configureForLdnStorageDisabledClient();
-        putItemsAndCheckAsExpectedInThisCluster(totalItems, ldnClusterName, entryValue);
+        joinLdnClusterAsStorageDisabledClient();
+        putItemsAndCheckAsExpectedInThisCluster(cache, totalItems, ldnClusterName, entryValue);
 
-        configureForNycStorageDisabledClient();
-        checkItemsAsExpectedInOtherCluster(totalItems, nycClusterName, entryValue);
+        joinNycClusterAsStorageDisabledClient();
+        checkItemsAsExpectedInOtherCluster(cache, totalItems, nycClusterName, entryValue);
     }
 
     @Test
@@ -76,20 +78,19 @@ public class FederatedCachingPartialStackIntegrationTest {
         int totalItems = 12;
         String entryValue = "yellow";
 
-        configureForNycStorageDisabledClient();
-        putItemsAndCheckAsExpectedInThisCluster(totalItems, nycClusterName, entryValue);
+        joinNycClusterAsStorageDisabledClient();
+        putItemsAndCheckAsExpectedInThisCluster(cache, totalItems, nycClusterName, entryValue);
 
-        configureForLdnStorageDisabledClient();
-        checkItemsAsExpectedInOtherCluster(totalItems, ldnClusterName, entryValue);
+        joinLdnClusterAsStorageDisabledClient();
+        checkItemsAsExpectedInOtherCluster(cache, totalItems, ldnClusterName, entryValue);
     }
 
-    private void putItemsAndCheckAsExpectedInThisCluster(int totalItems,
-                                                         String clusterName,
-                                                         String entryValue) {
+    private static void putItemsAndCheckAsExpectedInThisCluster(NamedCache<String, String> cache,
+                                                                int totalItems,
+                                                                String clusterName,
+                                                                String entryValue) {
 
         assertThat(CacheFactory.getCluster().getClusterName(), equalTo(clusterName));
-
-        cache = CacheFactory.getCache(CACHE_NAME);
 
         for (int i = 0; i < totalItems; i++) {
             cache.putAll(singletonMap(UUID.randomUUID().toString(), entryValue));
@@ -98,13 +99,12 @@ public class FederatedCachingPartialStackIntegrationTest {
         assertThat(cache.size(), equalTo(totalItems));
     }
 
-    private void checkItemsAsExpectedInOtherCluster(int totalItems,
-                                                    String clusterName,
-                                                    String expectedEntryValue) {
+    private static void checkItemsAsExpectedInOtherCluster(NamedCache<String, String> cache,
+                                                           int totalItems,
+                                                           String clusterName,
+                                                           String expectedEntryValue) {
 
         assertThat(CacheFactory.getCluster().getClusterName(), equalTo(clusterName));
-
-        cache = CacheFactory.getCache(CACHE_NAME);
         assertThat(cache.size(), equalTo(totalItems));
 
         EqualsFilter<String, String> filter = Filters.equal(new IdentityExtractor<>(), expectedEntryValue);
