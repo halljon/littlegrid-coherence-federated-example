@@ -7,7 +7,7 @@
     <caching-scheme-mapping>
         <cache-mapping>
             <cache-name>*</cache-name>
-            <scheme-name>federated</scheme-name>
+            <scheme-name>federated-scheme</scheme-name>
             <key-type>java.lang.String</key-type>
             <value-type>java.lang.Integer</value-type>
         </cache-mapping>
@@ -15,7 +15,7 @@
 
     <caching-schemes>
         <federated-scheme>
-            <scheme-name>federated</scheme-name>
+            <scheme-name>federated-scheme</scheme-name>
             <service-name>FederatedPartitionedCache</service-name>
             <backing-map-scheme>
                 <local-scheme>
