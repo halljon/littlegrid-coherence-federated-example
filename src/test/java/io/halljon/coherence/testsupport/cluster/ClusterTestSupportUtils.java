@@ -50,6 +50,7 @@ public final class ClusterTestSupportUtils {
     private static ClusterMemberGroup getClusterMemberGroup(String clusterName) {
         return ClusterMemberGroupUtils.newBuilder()
                 .setClusterName(clusterName)
+                .setLogLevel(3)
                 .setStorageEnabledCount(1)
                 .setClusterMemberGroupInstanceClassName(SimpleKeepAliveClusterMemberGroup.class.getName())
                 .setAdditionalSystemProperty("ldn-cluster-name", LDN_CLUSTER_NAME)

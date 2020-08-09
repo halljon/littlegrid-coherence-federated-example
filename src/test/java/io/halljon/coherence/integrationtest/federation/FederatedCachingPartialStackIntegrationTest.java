@@ -1,4 +1,4 @@
-package io.halljon.coherence.federation;
+package io.halljon.coherence.integrationtest.federation;
 
 import com.tangosol.net.CacheFactory;
 import com.tangosol.net.NamedCache;
