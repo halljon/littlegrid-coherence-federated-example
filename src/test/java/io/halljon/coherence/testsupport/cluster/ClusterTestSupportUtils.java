@@ -12,10 +12,10 @@ import java.lang.management.ManagementFactory;
  * Test support class to make tests free from configuration/setup type of code.
  */
 public final class ClusterTestSupportUtils {
-    private static final int MAXIMUM_CLUSTER_NAME_LENGTH = 66;
+    private static final int MAXIMUM_NAME_LENGTH = 66;
     private static final String PROCESS_NAME = ManagementFactory.getRuntimeMXBean().getName();
-    private static final String LDN_CLUSTER_NAME = StringUtils.truncate("LDN-" + PROCESS_NAME, MAXIMUM_CLUSTER_NAME_LENGTH);
-    private static final String NYC_CLUSTER_NAME = StringUtils.truncate("NYC-" + PROCESS_NAME, MAXIMUM_CLUSTER_NAME_LENGTH);
+    private static final String LDN_CLUSTER_NAME = StringUtils.truncate("LDN-" + PROCESS_NAME, MAXIMUM_NAME_LENGTH);
+    private static final String NYC_CLUSTER_NAME = StringUtils.truncate("NYC-" + PROCESS_NAME, MAXIMUM_NAME_LENGTH);
 
     private ClusterTestSupportUtils() {
         // Private constructor to prevent creation
