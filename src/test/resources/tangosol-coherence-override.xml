@@ -4,7 +4,7 @@
 
     <cluster-config>
         <multicast-listener>
-            <join-timeout-milliseconds system-property="join.timeout.milliseconds">150</join-timeout-milliseconds>
+            <join-timeout-milliseconds system-property="join.timeout.milliseconds">100</join-timeout-milliseconds>
         </multicast-listener>
     </cluster-config>
 

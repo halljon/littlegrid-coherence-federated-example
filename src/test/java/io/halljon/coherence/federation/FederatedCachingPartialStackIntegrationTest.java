@@ -29,16 +29,12 @@ public class FederatedCachingPartialStackIntegrationTest {
     private static final String CACHE_NAME = "test";
     private static final String LDN_CLUSTER_NAME = getLdnClusterName();
     private static final String NYC_CLUSTER_NAME = getNycClusterName();
-    private static final IdentityExtractor<String> EXTRACTOR = IdentityExtractor.INSTANCE();
 
     private static Properties systemPropertiesBeforeAllTests;
 
     @BeforeClass
     public static void beforeAllTests() {
         systemPropertiesBeforeAllTests = SystemUtils.snapshotSystemProperties();
-
-        System.setProperty("ldn-cluster-name", LDN_CLUSTER_NAME);
-        System.setProperty("nyc-cluster-name", NYC_CLUSTER_NAME);
     }
 
     @AfterClass
@@ -101,7 +97,7 @@ public class FederatedCachingPartialStackIntegrationTest {
         assertThat(CacheFactory.getCluster().getClusterName(), equalTo(clusterName));
         assertThat(cache.size(), equalTo(totalItems));
 
-        Filter<String> filter = Filters.equal(EXTRACTOR, expectedEntryValue);
+        Filter<String> filter = Filters.equal(IdentityExtractor.INSTANCE(), expectedEntryValue);
         assertThat(cache.aggregate(filter, new Count<>()), equalTo(totalItems));
     }
 }

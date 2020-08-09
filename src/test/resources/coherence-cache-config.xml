@@ -17,6 +17,8 @@
         <federated-scheme>
             <scheme-name>federated-scheme</scheme-name>
             <service-name>FederatedPartitionedCache</service-name>
+            <partition-count system-property="federation-cache-partition-count">257</partition-count>
+
             <backing-map-scheme>
                 <local-scheme>
                     <high-units>0</high-units>
