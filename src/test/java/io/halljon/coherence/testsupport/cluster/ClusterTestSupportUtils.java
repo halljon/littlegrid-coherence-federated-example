@@ -53,8 +53,8 @@ public final class ClusterTestSupportUtils {
                 .setLogLevel(3)
                 .setStorageEnabledCount(1)
                 .setClusterMemberGroupInstanceClassName(SimpleKeepAliveClusterMemberGroup.class.getName())
-                .setAdditionalSystemProperty("ldn-cluster-name", LDN_CLUSTER_NAME)
-                .setAdditionalSystemProperty("nyc-cluster-name", NYC_CLUSTER_NAME)
+                .setAdditionalSystemProperty("ldn-cluster-name", getLdnClusterName())
+                .setAdditionalSystemProperty("nyc-cluster-name", getNycClusterName())
                 .setAdditionalSystemProperty("federation-cache-partition-count", 7)
                 .buildAndConfigureForStorageDisabledClient();
     }
