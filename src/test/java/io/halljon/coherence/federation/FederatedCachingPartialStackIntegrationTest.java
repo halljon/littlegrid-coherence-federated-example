@@ -2,10 +2,10 @@ package io.halljon.coherence.federation;
 
 import com.tangosol.net.CacheFactory;
 import com.tangosol.net.NamedCache;
+import com.tangosol.util.Filter;
 import com.tangosol.util.Filters;
 import com.tangosol.util.aggregator.Count;
 import com.tangosol.util.extractor.IdentityExtractor;
-import com.tangosol.util.filter.EqualsFilter;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -27,6 +27,7 @@ import static org.junit.Assert.assertThat;
 
 public class FederatedCachingPartialStackIntegrationTest {
     private static final String CACHE_NAME = "test";
+    private static final IdentityExtractor<String> EXTRACTOR = IdentityExtractor.INSTANCE();
 
     private static Properties systemPropertiesBeforeAllTests;
 
@@ -105,7 +106,7 @@ public class FederatedCachingPartialStackIntegrationTest {
         assertThat(CacheFactory.getCluster().getClusterName(), equalTo(clusterName));
         assertThat(cache.size(), equalTo(totalItems));
 
-        EqualsFilter<String, String> filter = Filters.equal(new IdentityExtractor<>(), expectedEntryValue);
+        Filter<String> filter = Filters.equal(EXTRACTOR, expectedEntryValue);
         assertThat(cache.aggregate(filter, new Count<>()), equalTo(totalItems));
     }
 }
